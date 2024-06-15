@@ -1,0 +1,1864 @@
+
+Ë‡
+¯‡
+
+
+
+local druid = {}
+
+
+
+
+
+function druid.new(context, style) end
+
+
+
+function druid.on_language_change() end
+
+
+
+
+function druid.on_window_callback(event) end
+
+
+
+
+
+function druid.register(name, module) end
+
+
+
+
+function druid.set_default_style(style) end
+
+
+
+
+function druid.set_sound_function(callback) end
+
+
+
+
+function druid.set_text_function(callback) end
+
+
+
+
+
+local druid__back_handler = {}
+
+
+
+local druid__base_component = {}
+
+
+
+
+function druid__base_component.component:get_childrens(self) end
+
+
+
+
+
+function druid__base_component.component:get_context(self) end
+
+
+
+
+function druid__base_component.component:get_druid(self) end
+
+
+
+
+function druid__base_component.component:get_input_priority(self) end
+
+
+
+
+function druid__base_component.component:get_name(self) end
+
+
+
+
+
+
+function druid__base_component.component:get_node(self, node_or_name) end
+
+
+
+
+function druid__base_component.component:get_parent_component(self) end
+
+
+
+
+function druid__base_component.component:get_parent_name(self) end
+
+
+
+
+function druid__base_component.component:get_template(self) end
+
+
+
+
+
+function druid__base_component.component:get_uid(self) end
+
+
+
+
+function druid__base_component.component:reset_input_priority(self) end
+
+
+
+
+
+
+function druid__base_component.component:set_input_enabled(self, state) end
+
+
+
+
+
+
+
+function druid__base_component.component:set_input_priority(self, value, is_temporary) end
+
+
+
+
+
+
+function druid__base_component.component:set_nodes(self, nodes) end
+
+
+
+
+
+
+function druid__base_component.component:set_style(self, druid_style) end
+
+
+
+
+
+
+function druid__base_component.component:set_template(self, template) end
+
+
+
+
+local druid__blocker = {}
+
+
+
+
+function druid__blocker.init(self, node) end
+
+
+
+
+function druid__blocker.is_enabled(self) end
+
+
+
+
+
+function druid__blocker.set_enabled(self, state) end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__button = {}
+
+
+
+
+function druid__button.get_key_trigger(self) end
+
+
+
+
+
+
+
+function druid__button.init(self, node, callback, custom_args, anim_node) end
+
+
+
+
+
+function druid__button.is_enabled(self) end
+
+
+
+
+
+
+function druid__button.set_check_function(self, check_function, failure_callback) end
+
+
+
+
+
+
+function druid__button.set_click_zone(self, zone) end
+
+
+
+
+
+
+function druid__button.set_enabled(self, state) end
+
+
+
+
+
+function druid__button.set_key_trigger(self, key) end
+
+
+
+
+
+
+function druid__button.set_web_user_interaction(self, is_web_mode) end
+
+
+
+
+
+
+
+
+
+
+
+local druid__button__style = {}
+
+
+
+
+
+
+
+
+local druid__checkbox = {}
+
+
+
+
+function druid__checkbox.get_state(self) end
+
+
+
+
+
+
+
+function druid__checkbox.init(self, node, callback, click_node, initial_state) end
+
+
+
+
+
+
+function druid__checkbox.set_state(self, state, is_silent, is_instant) end
+
+
+
+
+local druid__checkbox__style = {}
+
+
+
+
+
+local druid__checkbox_group = {}
+
+
+
+
+function druid__checkbox_group.get_state(self) end
+
+
+
+
+
+
+function druid__checkbox_group.init(self, nodes, callback, click_nodes) end
+
+
+
+
+
+function druid__checkbox_group.set_state(self, indexes, is_instant) end
+
+
+
+
+
+
+
+
+
+
+
+local druid__data_list = {}
+
+
+
+function druid__data_list.clear(self) end
+
+
+
+
+function druid__data_list.get_created_components(self) end
+
+
+
+
+function druid__data_list.get_created_nodes(self) end
+
+
+
+
+function druid__data_list.get_data(self) end
+
+
+
+
+function druid__data_list.get_first_index(self) end
+
+
+
+
+function druid__data_list.get_index(self, data) end
+
+
+
+function druid__data_list.get_last_index(self) end
+
+
+
+function druid__data_list.get_length(self) end
+
+
+
+
+
+
+function druid__data_list.init(self, scroll, grid, create_function) end
+
+
+
+function druid__data_list.on_remove(self) end
+
+
+
+
+function druid__data_list.scroll_to_index(self, index) end
+
+
+
+
+
+function druid__data_list.set_data(self, data) end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__drag = {}
+
+
+
+
+
+function druid__drag.init(self, node, on_drag_callback) end
+
+
+
+
+function druid__drag.is_enabled(self) end
+
+
+
+
+
+function druid__drag.set_click_zone(self, node) end
+
+
+
+
+function druid__drag.set_enabled(self, is_enabled) end
+
+
+
+
+
+local druid__drag__style = {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__dynamic_grid = {}
+
+
+
+
+
+function druid__dynamic_grid._get_side_vector(self, side, is_forward) end
+
+
+
+
+
+
+
+function druid__dynamic_grid.add(self, node, index, shift_policy, is_instant) end
+
+
+
+
+
+function druid__dynamic_grid.clear(self) end
+
+
+
+
+function druid__dynamic_grid.get_all_pos(self) end
+
+
+
+
+function druid__dynamic_grid.get_borders(self) end
+
+
+
+
+
+function druid__dynamic_grid.get_index_by_node(self, node) end
+
+
+
+
+function druid__dynamic_grid.get_offset(self) end
+
+
+
+
+
+
+
+function druid__dynamic_grid.get_pos(self, index, node, origin_index) end
+
+
+
+
+
+function druid__dynamic_grid.get_size(self, border) end
+
+
+
+
+function druid__dynamic_grid.init(self, parent) end
+
+
+
+
+
+
+
+
+function druid__dynamic_grid.remove(self, index, shift_policy, is_instant) end
+
+
+
+
+
+
+function druid__dynamic_grid.set_position_function(self, callback) end
+
+
+
+local druid__event = {}
+
+
+
+function druid__event.clear(self) end
+
+
+
+
+function druid__event.initialize(self, initial_callback) end
+
+
+
+
+function druid__event.is_exist(self) end
+
+
+
+
+
+function druid__event.subscribe(self, callback, context) end
+
+
+
+
+function druid__event.trigger(self, ...) end
+
+
+
+
+
+function druid__event.unsubscribe(self, callback, context) end
+
+
+
+
+
+
+
+
+local druid__hotkey = {}
+
+
+
+
+
+function druid__hotkey.add_hotkey(self, keys, callback_argument) end
+
+
+
+
+
+
+function druid__hotkey.init(self, keys, callback, callback_argument) end
+
+
+
+
+local druid__hotkey__style = {}
+
+
+
+
+
+local druid__hover = {}
+
+
+
+
+
+function druid__hover.init(self, node, on_hover_callback) end
+
+
+
+
+function druid__hover.is_enabled(self) end
+
+
+
+
+
+function druid__hover.is_hovered(self) end
+
+
+
+
+
+function druid__hover.is_mouse_hovered(self) end
+
+
+
+
+
+function druid__hover.set_click_zone(self, zone) end
+
+
+
+
+
+function druid__hover.set_enabled(self, state) end
+
+
+
+
+function druid__hover.set_hover(self, state) end
+
+
+
+
+function druid__hover.set_mouse_hover(self, state) end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__input = {}
+
+
+
+
+function druid__input.get_text(self) end
+
+
+
+
+
+
+function druid__input.init(self, click_node, text_node, keyboard_type) end
+
+
+
+function druid__input.reset_changes(self) end
+
+
+
+
+function druid__input.select(self) end
+
+
+
+
+
+
+function druid__input.set_allowed_characters(self, characters) end
+
+
+
+
+
+
+function druid__input.set_max_length(self, max_length) end
+
+
+
+
+function druid__input.set_text(self, input_text) end
+
+
+
+
+function druid__input.unselect(self) end
+
+
+
+
+
+
+
+
+
+
+
+local druid__input__style = {}
+
+
+
+
+
+local druid__lang_text = {}
+
+
+
+
+
+
+
+
+
+
+
+function druid__lang_text.format(self, a, b, c, d, e, f, g) end
+
+
+
+
+
+
+function druid__lang_text.init(self, node, locale_id, adjust_type) end
+
+
+
+
+
+function druid__lang_text.set_to(self, text) end
+
+
+
+
+
+
+
+
+
+
+
+
+function druid__lang_text.translate(self, locale_id, a, b, c, d, e, f, g) end
+
+
+
+
+
+
+local druid__layout = {}
+
+
+
+
+
+
+function druid__layout.fit_into_node(self, node) end
+
+
+
+
+
+function druid__layout.fit_into_size(self, target_size) end
+
+
+
+
+function druid__layout.fit_into_window(self) end
+
+
+
+
+
+
+function druid__layout.init(self, node, mode, on_size_changed_callback) end
+
+
+
+
+
+
+function druid__layout.set_max_gui_upscale(self, max_gui_upscale) end
+
+
+
+
+
+function druid__layout.set_max_size(self, max_size) end
+
+
+
+
+
+function druid__layout.set_min_size(self, min_size) end
+
+
+
+
+
+
+function druid__layout.set_origin_position(self, new_origin_position) end
+
+
+
+
+
+
+function druid__layout.set_origin_size(self, new_origin_size) end
+
+
+
+
+
+
+local druid__pin_knob = {}
+
+
+
+
+
+
+function druid__pin_knob.init(self, callback, template, nodes) end
+
+
+
+
+
+
+
+function druid__pin_knob.set_angle(self, cur_value, min, max) end
+
+
+
+
+
+function druid__pin_knob.set_friction(self, value) end
+
+
+
+
+
+
+
+
+
+
+
+local druid__progress = {}
+
+
+
+function druid__progress.empty(self) end
+
+
+
+function druid__progress.fill(self) end
+
+
+
+function druid__progress.get(self) end
+
+
+
+
+
+
+function druid__progress.init(self, node, key, init_value) end
+
+
+
+
+
+function druid__progress.set_max_size(self, max_size) end
+
+
+
+
+
+function druid__progress.set_steps(self, steps, callback) end
+
+
+
+
+function druid__progress.set_to(self, to) end
+
+
+
+
+
+function druid__progress.to(self, to, callback) end
+
+
+
+
+
+local druid__progress__style = {}
+
+
+
+
+
+local druid__radio_group = {}
+
+
+
+
+function druid__radio_group.get_state(self) end
+
+
+
+
+
+
+function druid__radio_group.init(self, nodes, callback, click_nodes) end
+
+
+
+
+
+function druid__radio_group.set_state(self, index, is_instant) end
+
+
+
+
+
+
+
+local druid__rich_input = {}
+
+
+
+
+
+function druid__rich_input.init(self, template, nodes) end
+
+
+
+
+function druid__rich_input.set_placeholder(self, placeholder_text) end
+
+
+
+
+
+local druid__rich_text = {}
+
+
+function druid__rich_text.clear() end
+
+
+
+function druid__rich_text.get_line_metric() end
+
+
+
+function druid__rich_text.get_words() end
+
+
+
+
+
+function druid__rich_text.init(self, template, nodes) end
+
+
+
+
+
+
+function druid__rich_text.set_text(self, text) end
+
+
+
+
+function druid__rich_text.tagged(tag) end
+
+
+
+
+
+
+local druid__rich_text__style = {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__scroll = {}
+
+
+
+
+
+function druid__scroll.bind_grid(self, grid) end
+
+
+
+
+
+function druid__scroll.get_percent(self) end
+
+
+
+
+function druid__scroll.get_scroll_size(self) end
+
+
+
+
+
+function druid__scroll.init(self, view_node, content_node) end
+
+
+
+
+function druid__scroll.is_inert(self) end
+
+
+
+
+
+
+function druid__scroll.is_node_in_view(self, node) end
+
+
+
+
+
+function druid__scroll.scroll_to(self, point, is_instant) end
+
+
+
+
+
+function druid__scroll.scroll_to_index(self, index, skip_cb) end
+
+
+
+
+
+function druid__scroll.scroll_to_percent(self, percent, is_instant) end
+
+
+
+
+
+function druid__scroll.set_click_zone(self, node) end
+
+
+
+
+
+
+function druid__scroll.set_extra_stretch_size(self, stretch_size) end
+
+
+
+
+
+function druid__scroll.set_horizontal_scroll(self, state) end
+
+
+
+
+
+
+function druid__scroll.set_inert(self, state) end
+
+
+
+
+
+
+function druid__scroll.set_points(self, points) end
+
+
+
+
+
+
+
+function druid__scroll.set_size(self, size, offset) end
+
+
+
+
+
+function druid__scroll.set_vertical_scroll(self, state) end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__scroll__style = {}
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__slider = {}
+
+
+
+
+
+
+function druid__slider.init(self, node, end_pos, callback) end
+
+
+
+
+
+function druid__slider.set(self, value, is_silent) end
+
+
+
+
+
+
+function druid__slider.set_input_node(self, input_node) end
+
+
+
+
+
+
+function druid__slider.set_steps(self, steps) end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__static_grid = {}
+
+
+
+
+
+
+
+function druid__static_grid.add(self, item, index, shift_policy, is_instant) end
+
+
+
+
+
+function druid__static_grid.clear(self) end
+
+
+
+
+function druid__static_grid.get_all_pos(self) end
+
+
+
+
+function druid__static_grid.get_borders(self) end
+
+
+
+
+
+function druid__static_grid.get_index(self, pos) end
+
+
+
+
+
+function druid__static_grid.get_index_by_node(self, node) end
+
+
+
+
+function druid__static_grid.get_offset(self) end
+
+
+
+
+
+function druid__static_grid.get_pos(self, index) end
+
+
+
+
+function druid__static_grid.get_size(self) end
+
+
+
+
+
+
+function druid__static_grid.init(self, parent, element, in_row) end
+
+
+
+
+
+
+
+
+function druid__static_grid.remove(self, index, shift_policy, is_instant) end
+
+
+
+
+
+function druid__static_grid.set_anchor(self, anchor) end
+
+
+
+
+
+function druid__static_grid.set_in_row(self, in_row) end
+
+
+
+
+
+
+function druid__static_grid.set_position_function(self, callback) end
+
+
+
+
+
+local druid__static_grid__style = {}
+
+
+
+
+
+
+
+local druid__swipe = {}
+
+
+
+
+
+function druid__swipe.init(self, node, on_swipe_callback) end
+
+
+
+
+
+function druid__swipe.set_click_zone(self, zone) end
+
+
+
+
+
+
+local druid__swipe__style = {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local druid__text = {}
+
+
+
+
+
+function druid__text.get_text_adjust(self, adjust_type) end
+
+
+
+
+
+
+function druid__text.get_text_size(self, text) end
+
+
+
+
+
+
+function druid__text.init(self, node, value, adjust_type) end
+
+
+
+
+function druid__text.is_multiline(self) end
+
+
+
+
+
+function druid__text.set_alpha(self, alpha) end
+
+
+
+
+
+function druid__text.set_color(self, color) end
+
+
+
+
+
+function druid__text.set_minimal_scale(self, minimal_scale) end
+
+
+
+
+
+
+function druid__text.set_pivot(self, pivot) end
+
+
+
+
+
+function druid__text.set_scale(self, scale) end
+
+
+
+
+
+
+function druid__text.set_text_adjust(self, adjust_type, minimal_scale) end
+
+
+
+
+
+function druid__text.set_to(self, set_to) end
+
+
+
+
+
+local druid__text__style = {}
+
+
+
+
+
+
+
+
+
+
+local druid__timer = {}
+
+
+
+
+
+
+
+function druid__timer.init(self, node, seconds_from, seconds_to, callback) end
+
+
+
+
+
+function druid__timer.set_interval(self, from, to) end
+
+
+
+
+function druid__timer.set_state(self, is_on) end
+
+
+
+
+function druid__timer.set_to(self, set_to) end
+
+
+
+
+local druid_const = {}
+
+
+
+local druid_instance = {}
+
+
+
+function druid_instance.final(self) end
+
+
+
+
+
+function druid_instance.new(self, component, ...) end
+
+
+
+
+
+
+function druid_instance.new_back_handler(self, callback, params) end
+
+
+
+
+
+function druid_instance.new_blocker(self, node) end
+
+
+
+
+
+
+
+
+function druid_instance.new_button(self, node, callback, params, anim_node) end
+
+
+
+
+
+
+
+
+function druid_instance.new_checkbox(self, node, callback, click_node, initial_state) end
+
+
+
+
+
+
+
+function druid_instance.new_checkbox_group(self, nodes, callback, click_nodes) end
+
+
+
+
+
+
+
+function druid_instance.new_data_list(self, druid_scroll, druid_grid, create_function) end
+
+
+
+
+
+
+function druid_instance.new_drag(self, node, on_drag_callback) end
+
+
+
+
+
+function druid_instance.new_dynamic_grid(self, parent) end
+
+
+
+
+
+
+
+function druid_instance.new_hotkey(self, keys_array, callback, params) end
+
+
+
+
+
+
+function druid_instance.new_hover(self, node, on_hover_callback) end
+
+
+
+
+
+
+
+function druid_instance.new_input(self, click_node, text_node, keyboard_type) end
+
+
+
+
+
+
+
+function druid_instance.new_lang_text(self, node, locale_id, no_adjust) end
+
+
+
+
+
+
+function druid_instance.new_layout(self, node, mode) end
+
+
+
+
+
+
+
+function druid_instance.new_progress(self, node, key, init_value) end
+
+
+
+
+
+
+
+function druid_instance.new_radio_group(self, nodes, callback, click_nodes) end
+
+
+
+
+
+
+
+function druid_instance.new_rich_text(self, template, nodes) end
+
+
+
+
+
+
+function druid_instance.new_scroll(self, view_node, content_node) end
+
+
+
+
+
+
+
+function druid_instance.new_slider(self, node, end_pos, callback) end
+
+
+
+
+
+
+
+function druid_instance.new_static_grid(self, parent, element, in_row) end
+
+
+
+
+
+
+function druid_instance.new_swipe(self, node, on_swipe_callback) end
+
+
+
+
+
+
+
+function druid_instance.new_text(self, node, value, no_adjust) end
+
+
+
+
+
+
+
+
+function druid_instance.new_timer(self, node, seconds_from, seconds_to, callback) end
+
+
+
+
+
+
+
+function druid_instance.on_input(self, action_id, action) end
+
+
+
+
+
+
+
+function druid_instance.on_message(self, message_id, message, sender) end
+
+
+
+
+
+function druid_instance.remove(self, component) end
+
+
+
+
+
+
+function druid_instance.set_blacklist(self, blacklist_components) end
+
+
+
+
+
+
+function druid_instance.set_whitelist(self, whitelist_components) end
+
+
+
+
+
+function druid_instance.update(self, dt) end
+
+
+
+local helper = {}
+
+
+
+
+
+function helper.add_array(target, source) end
+
+
+
+
+
+function helper.centrate_nodes(margin, ...) end
+
+
+
+
+
+
+function helper.clamp(a, min, max) end
+
+
+
+
+
+function helper.contains(t, value) end
+
+
+
+
+function helper.deepcopy(orig_table) end
+
+
+
+
+
+
+
+function helper.distance(x1, y1, x2, y2) end
+
+
+
+
+
+function helper.get_border(node, offset) end
+
+
+
+
+function helper.get_closest_stencil_node(node) end
+
+
+
+
+function helper.get_gui_scale() end
+
+
+
+
+
+function helper.get_pivot_offset(pivot) end
+
+
+
+
+function helper.get_scaled_size(node) end
+
+
+
+
+
+function helper.get_scene_scale(node, include_passed_node_scale) end
+
+
+
+
+function helper.get_screen_aspect_koef() end
+
+
+
+
+function helper.get_text_metrics_from_node(text_node) end
+
+
+
+
+
+
+
+
+function helper.insert_with_shift(array, item, index, shift_policy) end
+
+
+
+function helper.is_mobile() end
+
+
+
+function helper.is_web() end
+
+
+
+
+
+
+function helper.lerp(a, b, t) end
+
+
+
+
+
+
+
+function helper.remove_with_shift(array, index, shift_policy) end
+
+
+
+
+
+function helper.round(num, num_decimal_places) end
+
+
+
+
+function helper.sign(val) end
+
+
+
+
+
+
+function helper.step(current, target, step) end
+
+
+
+
+function helper.table_to_string(t) end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@druid/annotations.lua" 

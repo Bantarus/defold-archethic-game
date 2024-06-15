@@ -1,0 +1,73 @@
+local druid = require("druid.druid")
+local monarch = require("monarch.monarch")
+local start_player_form = require ("scripts.components.ui.ui_start_player_form")
+
+
+function init(self)
+
+	print("Init pop start scene")
+
+	msg.post(".", "acquire_input_focus")
+
+	-- retrieve start scene data 
+	print("match data received from start scene")
+
+	local start_data = monarch.data(hash("popup_start_player_form"))
+
+	if start_data.template == "register" then
+
+		self.template = "register_player_form"
+
+	else 
+
+		self.template = "login_player_form"
+
+	end
+	
+
+	-- init druid 
+
+	self.druid = druid.new(self)
+
+	window.set_listener(function(_, event)
+		druid.on_window_callback(event)
+	end)
+
+
+	local template_node_root_id  = self.template .. "/root"
+	
+	gui.set_enabled(gui.get_node(template_node_root_id), true)
+	
+	self.start_player_form = self.druid:new(start_player_form,self.template,gui.get_tree(gui.get_node(template_node_root_id)))
+
+
+	
+end
+
+function final(self)
+	-- Cleanup the Druid instances
+	if self.druid then
+		self.druid:final()
+	end
+end
+
+function update(self, dt)
+	if self.druid then
+		self.druid:update(dt)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	self.druid:on_message(message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	return self.druid and self.druid:on_input(action_id, action)
+
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

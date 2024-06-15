@@ -1,0 +1,3 @@
+prototype: "/scenes/home/home.collection"
+load_dynamically: false
+dynamic_prototype: false

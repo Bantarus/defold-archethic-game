@@ -1,0 +1,52 @@
+local monarch = require "monarch.monarch"
+local game = require "modules.logic.game"
+local local_storage = require ("modules.storage.local_storage")
+local camera = require "orthographic.camera"
+
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	msg.post(".", "acquire_input_focus")
+	--msg.post("@render:", "use_fixed_fit_projection")
+
+
+	print(" main camera viewport ")
+	pprint(camera.get_viewport(nil))
+-- 
+-- 	if sys.get_sys_info().system_name == "HTML5" then
+-- 		html5.run([[
+-- 		document.addEventListener("DOMContentLoaded", function() {
+-- 			var Utils = ArchethicLib.Utils
+-- 			var Crypto= ArchethicLib.Crypto
+-- 			const archethic = new Archethic('https://testnet.archethic.net');
+-- 			archethic.connect().then(() => {
+-- 				console.log('Connected to Archethic Network');
+-- 			}).catch((error) => {
+-- 				console.error('Error connecting to Archethic Network', error);
+-- 			});
+-- 		});
+-- 		]])
+-- 	end
+
+	msg.post("#", "ready")
+
+
+
+end
+
+
+function on_message(self, message_id, message, sender)
+
+	if message_id == hash("ready") then
+		print("Ready to connect.")
+		local_storage.init()
+
+		
+		
+		monarch.show(hash("start"))
+
+
+	end
+
+end

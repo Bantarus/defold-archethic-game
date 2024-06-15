@@ -1,0 +1,3 @@
+prototype: "/scenes/start/start.collection"
+load_dynamically: false
+dynamic_prototype: false

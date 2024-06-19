@@ -6,7 +6,8 @@ local endpoint = "https://testnet.archethic.net"
 local tx_counter = 0
 
 
-local smart_contract_address = "0000193bf60609d0ac7974e4f57cee4ca4caddc3488036292d9d179e7e44bd1582db"
+
+local smart_contract_address = "00002AA98CD6C56B5142B9406FE2139B2EF4433FE98649423B09C6F094501DFEB3B6"
 
 M.api_functions = {
 	ADD_PLAYER = "add_player",
@@ -21,7 +22,8 @@ M.api_functions = {
 	GET_TURN = "get_turn",
 	GET_ROUND = "get_round",
 	GET_DAY = "get_day",
-	GET_MODE = "get_mode"
+	GET_MODE = "get_mode",
+	GET_PLAYERS = "get_players"
 	
 }
 
@@ -103,8 +105,8 @@ local function list_to_string(string_list)
 
 end
 
-function M.send_transfert_transaction(encryption_data,recipient_action, args )
-
+function M.send_transfer_transaction(recipient_action, args )
+	local encryption_data = local_storage.get_encryption_data()
 	local args_string = "[]"
 	
 	if args ~= nil and table.getn(args) > 0 then
@@ -112,10 +114,8 @@ function M.send_transfert_transaction(encryption_data,recipient_action, args )
 		args_string = list_to_string(args)
 
 	end
-
 	print("args string : " .. args_string)
 	print(" encryption data : " .. json.encode(encryption_data))
-	
 	
 	local tx = [[
 	
@@ -125,7 +125,6 @@ function M.send_transfert_transaction(encryption_data,recipient_action, args )
 	const combined_hex = salt_hex + password_hex
 	const {privateKey, publicKey} = Crypto.deriveKeyPair(combined_hex, 0)
 	console.log("public key : " + Utils.uint8ArrayToHex(publicKey) )
-	console.log("private key : " + Utils.uint8ArrayToHex(privateKey))
 	const decryptedAesKey = Crypto.ecDecrypt("]] .. encryption_data.encrypted_aes_key .. [[",privateKey)
 	const decryptedSeed = Crypto.aesDecrypt("]] .. encryption_data.encrypted_seed .. [[", decryptedAesKey)
 	const originPrivateKey = Utils.originPrivateKey
@@ -141,32 +140,35 @@ function M.send_transfert_transaction(encryption_data,recipient_action, args )
 			, ]] .. args_string .. [[)
 			.build(decryptedSeed, index)
 			.originSign(originPrivateKey)
-			.on("confirmation",(nbConf, maxConf) => { console.log(nbConf, maxConf)})
+			.on("confirmation",(nbConf, maxConf) => { 
+				console.log(nbConf, maxConf)
+				JsToDef.send("]] .. recipient_action .. [[_confirmed");
+			})
 			.on("error",(context, reason ) => {
 					console.log("Context: ", context)
 					console.log("Reason: " , reason)
-			})
+
+					JsToDef.send("]] .. recipient_action .. [[_error", context + " : " + reason );
+					
+				})
+
+				console.log(tx.toJSON())
 
 			try {
 
-
 				tx.send()
-
-
-
 
 			} catch (error) {
 				console.log(error)
 			}
 			
 		})
+
+		
 	
 	]]
 
-	html5.run(tx)
-
-	return true
-
+	return html5.run(tx)
 
 end
 
@@ -181,6 +183,7 @@ function M.build_network_call_function(api_function, args )
 		args_string = list_to_string(args)
 
 	end
+	
 	print("args string : " .. args_string)
 	local request = [[
 	try {
@@ -188,7 +191,8 @@ function M.build_network_call_function(api_function, args )
 	archethic.network.callFunction("]] .. smart_contract_address .. [[","]] .. api_function .. [["
 	,]] .. args_string .. [[)
 	.then( (response) => {
-		console.log("hello then here")
+		console.log("archethic.network.callFunction")
+		
 		sessionStorage.setItem("]] .. api_function .. [[",JSON.stringify(response)) 
 	
 	})
@@ -196,7 +200,7 @@ function M.build_network_call_function(api_function, args )
 }catch(error) {
 	console.log("error in call function : " + error)
 }
-	]]
+]]
 
 	html5.run(request)
 

@@ -1,7 +1,7 @@
 local druid = require("druid.druid")
 local navigation_menu = require("scripts.components.ui.ui_navigation_menu")
-
-
+local archmon_console = require("scripts.components.ui.ui_archmon_console")
+local game_server_state = require("scripts.components.ui.ui_game_server_state")
 
 
 function init(self)
@@ -19,9 +19,14 @@ function init(self)
 	end)
 
 	self.navigation_menu = self.druid:new(navigation_menu,"navigation_menu", gui.get_tree(gui.get_node("navigation_menu/root")))
+	-- block menu button from current scene
+	self.druid:new_blocker(gui.get_node("navigation_menu/button_house"))
 
-	-- gui.play_flipbook(gui.get_node("animation_flair_test"), "flair_circle", nil, { playback_rate = 0.1 })
+	self.game_server_state = self.druid:new(game_server_state,"game_server_state",  gui.get_tree(gui.get_node("game_server_state/root")))
+	
+	
 
+	self.archmon_console = self.druid:new(archmon_console,"archmon_home_console",gui.get_tree(gui.get_node("archmon_home_console/root")))
 	
 end
 

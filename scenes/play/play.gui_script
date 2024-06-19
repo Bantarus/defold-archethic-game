@@ -3,16 +3,85 @@ local navigation_menu = require("scripts.components.ui.ui_navigation_menu")
 local game_archethic = require("modules.networking.game_archethic")
 local local_storage = require("modules.storage.local_storage")
 local game_server_state = require("scripts.components.ui.ui_game_server_state")
+local players_finder = require("scripts.components.ui.ui_players_finder")
+local session_storage = require("modules.storage.session_storage")
+local progress = require ("druid.extended.progress")
+
+
+local function display_message(message)
+
+
+
+end
+
+local function js_listener(self,message_id, message)
+
+	if message_id == "add_player_confirmed" then
+
+
+		print("TX confirmed ")
+
+		-- display next loading message
+		local message = "Waiting for Battlechain update ..."
+		self.add_player_is_confirmed = true
+	
+		
+	end
+
+	if message_id == "add_player_error" then
+
+		-- display_message(message)
+
+		print("tx error : " ..  message )
+
+		-- stop waiting animation
+		gui.delete_node(self.join_flair_cycle_cloned_prefab["prefab_flair_circle_animation"])
+
+		-- enable button 
+
+		self.button_join:set_input_enabled(true)
+
+		-- show button
+		gui.set_enabled(self.button_join.node, true)
+		gui.set_enabled(self.text_button_join.node, true)
+
+	end
+	
+
+
+end
+
+
 
 local function on_click_join(self,args,button)
 	print("Join Button was clicked...")
 
-	local encryption_data = local_storage.get_encryption_data()
+	-- send tx to archethic
+	game_archethic.send_transfer_transaction("add_player", {})
 
-	game_archethic.send_transfert_transaction(encryption_data, "add_player", {})
+	-- disable button until next game server xp update
 
-	-- play adding player animation popup while player info still not onchain
+	button:set_input_enabled(false)
 
+	-- hide text button
+	gui.set_enabled(self.text_button_join.node, false)
+
+
+
+	-- play waiting circle flair animation at button position
+
+	local cloned_prefab = gui.clone_tree(gui.get_node("prefab_flair_circle_animation"))
+	gui.set_position(cloned_prefab["prefab_flair_circle_animation"], gui.get_position(button.node))
+	gui.set_enabled(cloned_prefab["prefab_flair_circle_animation"], true)
+	gui.play_flipbook(cloned_prefab["prefab_flair_circle_animation"], "flair_circle", nil, { playback_rate = 0.1 })
+
+
+	self.join_flair_cycle_cloned_prefab = cloned_prefab
+	
+
+	
+	
+	self.is_waiting_player_info_init = true
 	
 	
 
@@ -22,7 +91,9 @@ local function play_adding_player_animation_popup()
 
 
 end
-
+local function on_progress_step(self, value)
+	
+end
 
 function init(self)
 
@@ -38,22 +109,83 @@ function init(self)
 		druid.on_window_callback(event)
 	end)
 
+	-- add js listener 
+
+	if jstodef then
+		jstodef.add_listener(js_listener)
+	end
+
 	self.navigation_menu = self.druid:new(navigation_menu,"navigation_menu", gui.get_tree(gui.get_node("navigation_menu/root")))
 
 	-- block menu button from current scene
 	self.druid:new_blocker(gui.get_node("navigation_menu/button_play"))
+
+	self.progress_x = self.druid:new(progress,"progress_fill_x", "x", 1)
+	self.progress_x:set_steps({0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1}, on_progress_step)
+	self.progress_x:to(0.4)
 	
 	self.game_server_state = self.druid:new(game_server_state,"game_server_state",  gui.get_tree(gui.get_node("game_server_state/root")))
+
+
+	self.players_finder = self.druid:new(players_finder,"players_finder",gui.get_tree(gui.get_node("players_finder/root")))
+	
+
 	
 	-- check if player has already join the battlechain 
 	-- by looking for player info on chain
 	-- if not render the join button
+	-- else rendre the players finder
 
-	self.button = self.druid:new_button("button_join", on_click_join)
+	local player_info = local_storage.get_player_info()
+
+	local players = json.decode(session_storage.get_item("get_players"))
 	
-	
+	if player_info ~= nil then
+
+		print("player_info find in local_storage : " .. json.encode(player_info))
+		
+		gui.delete_node(gui.get_node("button_join"))
+		gui.set_enabled(gui.get_node("player_finder_zone"), true)
 
 	
+		if not  players  then
+			-- play waiting animation until first get_players update 
+			local cloned_prefab = gui.clone_tree(gui.get_node("prefab_flair_circle_animation"))
+			gui.set_position(cloned_prefab["prefab_flair_circle_animation"], gui.get_position(gui.get_node("player_finder_zone")))
+			gui.set_enabled(cloned_prefab["prefab_flair_circle_animation"], true)
+			gui.play_flipbook(cloned_prefab["prefab_flair_circle_animation"], "flair_circle", nil, { playback_rate = 0.1 })
+
+			self.players_finder_waiting_animation = cloned_prefab
+
+			self.is_waiting_players_init = true
+		end
+		
+		
+
+	else -- limit game access/ui
+	
+		gui.set_enabled(gui.get_node("button_join"), true)
+		self.button_join = self.druid:new_button("button_join", on_click_join)
+		self.text_button_join = self.druid:new_text("text_button_join","JOIN PARTY")
+
+		-- block home button until player has joined party
+
+		self.blocker_button_house = self.druid:new_blocker(gui.get_node("navigation_menu/button_house"))
+
+		self.navigation_menu.button_house:set_input_enabled(false)
+
+		-- block player_finder_zone 
+	--	gui.set_visible(gui.get_node("player_finder_zone"), false)
+		--self.blocker_player_finder_zone =  self.druid:new_blocker(gui.get_node("player_finder_zone"))
+
+		gui.set_enabled(gui.get_node("player_finder_zone"), false)
+
+		if not  players  then
+			self.is_waiting_players_init = true
+		end
+		
+	end
+
 end
 
 function final(self)
@@ -74,6 +206,46 @@ end
 
 function on_message(self, message_id, message, sender)
 	self.druid:on_message(message_id, message, sender)
+
+	if message_id == hash("player_info_updated") and self.is_waiting_player_info_init then
+
+
+		print("player_info_updated in play")
+		
+		if self.join_flair_cycle_cloned_prefab then
+			gui.delete_node(self.join_flair_cycle_cloned_prefab["prefab_flair_circle_animation"])
+		end
+		-- delete join button node
+		gui.delete_node(gui.get_node("button_join"))
+		-- disable blocker
+		self.navigation_menu.button_house:set_input_enabled(true)
+
+		 gui.set_enabled(gui.get_node("player_finder_zone"), true)
+		
+		--self.players_finder = self.druid:new(players_finder,"players_finder",gui.get_tree(gui.get_node("players_finder/root")))
+		--gui.set_visible(gui.get_node("player_finder_zone"), true)
+	--	gui.delete_node(self.blocker_player_finder_zone.node)
+
+		self.is_waiting_player_info_init = false
+
+
+	end
+
+	if message_id == hash("players_updated") and self.is_waiting_players_init then
+
+		gui.delete_node(self.players_finder_waiting_animation["prefab_flair_circle_animation"])
+		
+		self.is_waiting_players_init = false
+
+	end
+
+	if message_id == hash("button_fight_clicked") then
+
+		 monarch.show(hash("pop_play_confirm_fight"), nil ,message.data)
+		
+
+	end
+	
 end
 
 function on_input(self, action_id, action)

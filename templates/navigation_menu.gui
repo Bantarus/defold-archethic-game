@@ -462,7 +462,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "HOUSE"
+  text: "HOME"
   font: "main"
   id: "text_house"
   xanchor: XANCHOR_NONE

@@ -127,7 +127,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "game"
+  id: "battle"
   data: "components {\n"
   "  id: \"screen_factory\"\n"
   "  component: \"/monarch/screen_factory.script\"\n"
@@ -144,7 +144,7 @@ embedded_instances {
   "  }\n"
   "  properties {\n"
   "    id: \"screen_id\"\n"
-  "    value: \"game\"\n"
+  "    value: \"battle\"\n"
   "    type: PROPERTY_TYPE_HASH\n"
   "  }\n"
   "  property_decls {\n"
@@ -153,7 +153,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"collectionfactory\"\n"
   "  type: \"collectionfactory\"\n"
-  "  data: \"prototype: \\\"/scenes/game/game.collection\\\"\\n"
+  "  data: \"prototype: \\\"/scenes/battle/battle.collection\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"

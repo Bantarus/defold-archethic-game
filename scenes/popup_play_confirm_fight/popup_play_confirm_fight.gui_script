@@ -1,39 +1,217 @@
 local druid = require("druid.druid")
 local monarch = require("monarch.monarch")
+local game_archethic = require("modules.networking.game_archethic")
+local local_storage = require("modules.storage.local_storage")
+local session_storage = require("modules.storage.session_storage")
+
+local archmon_card = require("scripts.components.ui.ui_archmon_card")
+
+local waiting_messages = {
+	WAITING_FIGHT_CONFIRMATION = "",
+	FETCHING_FIGHT_RESPONSE = ""
+
+}
+local function cancel_waiting_animation(self)
+	gui.cancel_flipbook(gui.get_node("waiting_animation"))
+	gui.set_enabled(gui.get_node("waiting_animation"), false)
 
 
+
+end
+
+local function play_waiting_animation(self)
+
+	gui.set_enabled(gui.get_node("waiting_animation"), true)
+	gui.play_flipbook(gui.get_node("waiting_animation"), "circle_waiting_animation", nil, { playback_rate = 0.1 })
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+local function loop_fetch_response(self)
+
+
+	timer.delay(1, true, function(self,handle,time_elapsed)
+
+		local args = {self.public_genesis_address}
+		game_archethic.build_network_call_function("get_player_battle_historic", args)
+
+		-- check for battle_historic update in session
+		local battle_historic = json.decode(session_storage.get_item("get_player_battle_historic"))
+
+		-- print("battle_historic : " .. json.encode(battle_historic))
+
+		if battle_historic ~= nil and #battle_historic > 0 and self.fight_tx_is_confirmed  then
+
+			print("battle_historic not empty ! ")
+
+			for i, battle_info in ipairs(battle_historic) do
+
+				print("comparing" .. self.fight_transaction_address .. " to " .. battle_info.transaction_address)
+
+				if string.lower(battle_info.transaction_address) == string.lower(self.fight_transaction_address) then
+
+					timer.cancel(handle)
+
+					monarch.show(hash("battle"), nil , { data = self.fight_data, battle_info = battle_info })
+
+					break
+
+				end
+
+			end
+
+
+		end
+
+
+	end)
+
+
+end
+
+local function js_listener(self,message_id, message)
+
+	if message_id == "fight_confirmed" then
+
+
+		print("TX confirmed : " .. json.encode(message))
+		self.fight_tx_is_confirmed = true
+		self.fight_transaction_address = json.decode(message).address
+		print("fight_transaction_address : " .. self.fight_transaction_address)
+		-- start timer to fetch response for the fight transaction 
+		-- every second
+		loop_fetch_response(self)
+
+	end
+
+	if message_id == "fight_error" then
+
+		-- display_message(message)
+		self.fight_tx_is_confirmed = false
+
+
+		print("tx error : " .. json.encode(message))
+		gui.set_text(self.text_progress.node,"Fight invalid.")
+		-- update gui
+		cancel_waiting_animation(self)
+		gui.set_enabled(self.button_cancel.node, true)
+		gui.set_enabled(self.button_confirm.node, true)
+
+	end
+
+
+
+end
+
+
+
+local function send_fight_request(self)
+
+	gui.set_text(self.text_progress.node,"Fight !")
+
+	self.is_waiting_fight_confirmation = false
+
+	-- send request to archethic
+	local args = {self.fight_data.opponent_genesis_address}
+	game_archethic.send_transfer_transaction(game_archethic.api_functions.FIGHT, args)
+
+	-- update gui
+	gui.set_enabled(self.button_cancel.node, false)
+	gui.set_enabled(self.button_confirm.node, false)
+
+	-- start waiting animation
+	play_waiting_animation(self)
+
+
+
+
+
+end
+
+
+local function on_click_cancel(self,args,button)
+
+	monarch.back()
+
+end
+
+
+local function on_click_confirm(self,args,button)
+
+	print("fight now !")
+	send_fight_request(self)
+
+
+
+end
 
 
 function init(self)
 
-	print("Init pop play scene")
+	print("Init popup play confirm fight")
 
 	msg.post(".", "acquire_input_focus")
 
-	
+	-- add js listener 
 
-	local fight_data = monarch.data(hash("popup_play_confirm_fight"))
+	if jstodef then
+		jstodef.add_listener(js_listener)
+	end
 
+	self.fight_data = monarch.data(hash("popup_play_confirm_fight"))
+	self.fight_tx_is_confirmed = false
 
 	-- init druid 
 
 	self.druid = druid.new(self)
 
+	self.public_genesis_address = local_storage.get_public_address()
 
-	self.button_cancel = self.druid:new_button("button_cancel")
+	-- player info
+	gui.set_text(gui.get_node("player_finder_archmon_card/text_username"), local_storage.get_username() )
+
+	self.player_archmon_card = self.druid:new(archmon_card,"player_finder_archmon_card/prefab_archmon_card"
+	, gui.get_tree(gui.get_node("player_finder_archmon_card/prefab_archmon_card/root")), local_storage.get_player_info().archmon)
+	
+	-- opponent info
+	gui.set_text(gui.get_node("opponent_finder_archmon_card/text_username"), self.fight_data.opponent_info.username)
+
+	self.player_archmon_card = self.druid:new(archmon_card,"opponent_finder_archmon_card/prefab_archmon_card"
+	, gui.get_tree(gui.get_node("opponent_finder_archmon_card/prefab_archmon_card/root")), self.fight_data.opponent_info.archmon)
+	
+	
+	self.button_cancel = self.druid:new_button("button_cancel",on_click_cancel)
 	self.text_button_cancel = self.druid:new_text("text_button_cancel", "CANCEL")
 
-	self.button_confirm = self.druid:new_button("button_confirm")
-	self.text_button_confirm = self.druid:new_text("text_button_confirm", "FIGHT NOW !")
+	self.button_confirm = self.druid:new_button("button_confirm",on_click_confirm)
+	self.text_button_confirm = self.druid:new_text("text_button_confirm", "FIGHT!")
+
+
+
+
+
 	
 	-- start decrementing counter at 10
 
 	self.confirmation_counter = 10
 	self.is_waiting_fight_confirmation = true
-	
-	self.text_progress = self.druid:new_text("text_progress", "Fight request will be sent in ... " ..self.confirmation_counter )
 
+	self.text_progress = self.druid:new_text("text_progress", "Fight request will be sent in ... " ..self.confirmation_counter )
+	
 	self.tick_counter = 0
+
+	self.tick_delta  = 0
 
 
 end
@@ -46,15 +224,7 @@ function final(self)
 end
 
 function update(self, dt)
-	if self.druid then
-		self.druid:update(dt)
-	end
-end
 
-function on_message(self, message_id, message, sender)
-	self.druid:on_message(message_id, message, sender)
-
-	
 	self.tick_delta = self.tick_delta + dt
 
 	if self.is_waiting_fight_confirmation and self.tick_delta >= 1.0 then
@@ -63,17 +233,35 @@ function on_message(self, message_id, message, sender)
 
 		if self.confirmation_counter == 0 then
 
-			self.is_waiting_fight_confirmation = false
+			send_fight_request(self)
+
+
 		end
-		
+
 		self.tick_delta = 0
-		
-		
+
+
 	end
-	
+
+
+
+	if self.druid then
+		self.druid:update(dt)
+	end
+
+
+
+end
+
+function on_message(self, message_id, message, sender)
+	self.druid:on_message(message_id, message, sender)
+
+
+
+
 
 	if message_id == hash("battle_ready") then
-		
+
 
 
 

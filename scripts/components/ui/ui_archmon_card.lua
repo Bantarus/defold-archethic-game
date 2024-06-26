@@ -21,6 +21,8 @@ local SCHEME = {
 
 }
 
+
+
 -- game server state consumer 
 local function update_card(self,archmon)
 
@@ -35,6 +37,7 @@ local function update_card(self,archmon)
 
 
 	gui.set_text(self.text_power.node, archmon.power)
+	gui.set_text(self.text_defense.node, archmon.defense)
 
 	local xp_pct_value = math.floor(archmon.xp / (archmon.level * 20 ) * 100 ) / 100
 	self.xp_bar:to(xp_pct_value)  
@@ -81,7 +84,8 @@ function Component:init(template, nodes, archmon, parent)
 	self:set_nodes(nodes)
 	self.root = self:get_node(SCHEME.ROOT)
 	self.druid = self:get_druid()
-	
+
+	self.archmon = archmon
 
 	self.text_archmon_name = self.druid:new_text(nodes[self:get_template() .. "/text_archmon_name"],"ARCHMON")
 
@@ -93,17 +97,18 @@ function Component:init(template, nodes, archmon, parent)
 	self.text_health = self.druid:new_text(nodes[self:get_template() .. "/text_health"], archmon.health .. "/" .. archmon.base_health)
 	self.health_bar.on_change:subscribe(function(_, value)
 
-		gui.set_text(self.text_health.node, archmon.health .. "/" .. archmon.base_health)
+		gui.set_text(self.text_health.node, self.archmon.health .. "/" .. self.archmon.base_health)
 
 	end)
 
 	self.text_power =  self.druid:new_text(nodes[self:get_template() .. "/text_power"],archmon.power)
-
+	self.text_defense =  self.druid:new_text(nodes[self:get_template() .. "/text_defense"],archmon.defense)
+	
 	self.xp_bar = self.druid:new(progress,nodes[self:get_template() .. "/xp_fill_x"],"x", archmon.xp / (archmon.level * 20 ))
 	self.xp_bar.on_change:subscribe(function(_, value)
 
 
-		gui.set_text(self.text_xp.node, archmon.xp .. "/" .. archmon.xp_to_next_level)
+		gui.set_text(self.text_xp.node, self.archmon.xp .. "/" .. self.archmon.xp_to_next_level)
 	end)
 
 	self.text_xp = self.druid:new_text(nodes[self:get_template() .. "/text_xp"],archmon.xp .. "/" .. (archmon.level * 20 ))
@@ -135,9 +140,23 @@ function Component:init(template, nodes, archmon, parent)
 			end
 		end
 
-	end
+end
 
+function Component:update_health(archmon) 
 
+	print("update health : " .. json.encode(archmon))
+	self.archmon = archmon
+	local health_pct_value = math.floor(archmon.health / archmon.base_health * 100 ) / 100
+
+	self.health_bar:to(health_pct_value)
+	--local text_health = archmon.health .. "/" .. archmon.base_health
+	--print(text_health)
+	--gui.set_text(self.text_health.node,text_health )
+	
+
+end
+
+	
 function Component:on_remove() end
 
 

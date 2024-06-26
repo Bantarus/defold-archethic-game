@@ -927,7 +927,7 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: -140.0
     y: -40.0
     z: 0.0
     w: 1.0
@@ -945,7 +945,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
+    x: 280.0
     y: 25.0
     z: 0.0
     w: 1.0
@@ -962,7 +962,7 @@ nodes {
   id: "xp_bar"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
   parent: "box_stats"
   layer: ""
@@ -1004,7 +1004,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
+    x: 280.0
     y: 25.0
     z: 0.0
     w: 1.0
@@ -1021,7 +1021,7 @@ nodes {
   id: "xp_fill_x"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
   parent: "xp_bar"
   layer: ""
@@ -1045,7 +1045,7 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: 140.0
     y: 0.0
     z: 0.0
     w: 1.0

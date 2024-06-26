@@ -4,6 +4,19 @@ local archmon_console = require("scripts.components.ui.ui_archmon_console")
 local game_server_state = require("scripts.components.ui.ui_game_server_state")
 
 
+local function js_listener(self,message_id, message)
+
+
+
+		print("TX message : " .. message)
+
+	
+	
+
+
+
+end
+
 function init(self)
 
 	print("Init home scene")
@@ -18,6 +31,13 @@ function init(self)
 		druid.on_window_callback(event)
 	end)
 
+	-- add js listener 
+
+	if jstodef then
+		jstodef.add_listener(js_listener)
+	end
+
+	
 	self.navigation_menu = self.druid:new(navigation_menu,"navigation_menu", gui.get_tree(gui.get_node("navigation_menu/root")))
 	-- block menu button from current scene
 	self.druid:new_blocker(gui.get_node("navigation_menu/button_house"))

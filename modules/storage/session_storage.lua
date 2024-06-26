@@ -99,8 +99,8 @@ function M.check_update(self, api_key, current_value , callback, force)
 
 	end
 
-	print("session_decoded_value : " .. json.encode(session_decoded_value))
-	print("current_value : " .. json.encode(current_value)  ) 
+	--print("session_decoded_value : " .. json.encode(session_decoded_value))
+	--print("current_value : " .. json.encode(current_value)  ) 
 
 	if session_decoded_value ~= nil and not utils.deepCompare(session_decoded_value,current_value) then
 

@@ -4,6 +4,7 @@ local game_archethic = require("modules.networking.game_archethic")
 local session_storage = require("modules.storage.session_storage")
 local data_list = require("druid.extended.data_list")
 local archmon_card = require("scripts.components.ui.ui_archmon_card")
+local local_storage = require("modules.storage.local_storage")
 
 ---@class component_name : druid.players_finder
 local Component = component.create("players_finder")
@@ -22,9 +23,9 @@ local function on_click_fight(self,args,button)
 
 	
 
-	print("click fight for :  " .. json.encode(args.data))
+	print("click fight for :  " .. json.encode(args.data.player_info.archmon))
 
-	msg.post(".", "button_fight_clicked", { data = args.data })
+	msg.post(".", "button_fight_clicked", { opponent_genesis_address = args.data.player_genesis_address, opponent_info = args.data.player_info })
 
 	-- show pop fight confirmation
 	-- monarch.show(hash("pop_play_confirm_fight"), nil , args)
@@ -43,10 +44,10 @@ local function create_element(self,data, index,data_list)
 
 	local instance = gui.clone_tree(self.prefab)
 	-- print(" prefab clone instance : " .. json.encode(instance))
-	print(" data : " .. json.encode(data))
+	
 	-- gui.set_enabled(instance[self:get_template() .. "/prefab_card_content"], true)
 	gui.set_enabled(instance[self:get_template() .. "/finder_archmon_card/root"], true)
-	-- gui.set_text(instance[self:get_template() .. "/text_username"], data.username)
+	gui.set_text(instance[self:get_template() .. "/finder_archmon_card/text_username"], data.player_info.username)
 	
 	local archmon_card = self.druid:new(archmon_card,"finder_archmon_card/prefab_archmon_card", instance, data.player_info.archmon)
 
@@ -73,17 +74,13 @@ function Component:init(template, nodes)
 
 	gui.set_enabled(self.root, true)
 	
-	--self.button_fight = self.druid:new_button(SCHEME.BUTTON_FIGHT, on_click_fight)
-
+	
 	self.scroll = self.druid:new_scroll("grid_view","grid_content")
 	self.scroll:set_vertical_scroll(false)
 
 	self.grid = self.druid:new_static_grid("grid_content","finder_archmon_card/root", 99)
 
-	-- self.grid.on_add_item:subscribe(function(_, node, index)
-	-- 	print("add_item : " .. index )
-	-- 	print("position : " .. gui.get_position(node))
-	-- end)
+
 	
 	self.prefab = gui.get_node(template .. "/finder_archmon_card/root")
 	-- self.prefab = gui.get_node(template .. "/prefab_card_content")
@@ -100,20 +97,27 @@ function Component:init(template, nodes)
 	pprint("players : " .. json.encode(self.players))
 	-- if profile contain saved squads then they are added to the decks inventory data table 
 
+
+	self.player_genesis_address = local_storage.get_public_address()
 	-- init data table 
 	local players_table = {}
 	
 	if self.players then 
 		for k, v in pairs(self.players) do
 
-			table.insert(players_table, {player_genesis_address = k , player_info = v})
+			-- if player is self then dont add to finder
+			if string.lower(k) ~= string.lower(self.player_genesis_address) then
+
+				table.insert(players_table, {player_genesis_address = k , player_info = v})
+
+			end
 
 		end
 
 		self.data_list:set_data(players_table)
 
 	
-		self.scroll:scroll_to_index(1)
+		
 		
 
 	else 
@@ -153,12 +157,14 @@ function Component:update(dt)
 			print("updated players : " .. json.encode(updated_players))
 			for k, v in pairs(updated_players) do
 
+				-- if player is self then dont add to finder
+				if string.lower(k) ~= string.lower(self.player_genesis_address) then
 				table.insert(players_table, {player_genesis_address = k , player_info = v})
-
+				end
 			end
 			print("players table : " .. json.encode(players_table))
 			self.data_list:set_data(players_table)
-			self.scroll:scroll_to_index(1)
+			
 			
 			
 			msg.post(".", "players_updated")

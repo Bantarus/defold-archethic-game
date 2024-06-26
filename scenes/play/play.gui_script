@@ -1,4 +1,5 @@
 local druid = require("druid.druid")
+local monarch = require("monarch.monarch")
 local navigation_menu = require("scripts.components.ui.ui_navigation_menu")
 local game_archethic = require("modules.networking.game_archethic")
 local local_storage = require("modules.storage.local_storage")
@@ -57,7 +58,7 @@ local function on_click_join(self,args,button)
 	print("Join Button was clicked...")
 
 	-- send tx to archethic
-	game_archethic.send_transfer_transaction("add_player", {})
+	game_archethic.send_transfer_transaction("add_player", {local_storage.get_username()})
 
 	-- disable button until next game server xp update
 
@@ -163,14 +164,14 @@ function init(self)
 		
 
 	else -- limit game access/ui
-	
+	print("player info not find, limiting access ")
 		gui.set_enabled(gui.get_node("button_join"), true)
 		self.button_join = self.druid:new_button("button_join", on_click_join)
 		self.text_button_join = self.druid:new_text("text_button_join","JOIN PARTY")
 
 		-- block home button until player has joined party
 
-		self.blocker_button_house = self.druid:new_blocker(gui.get_node("navigation_menu/button_house"))
+		--self.blocker_button_house = self.druid:new_blocker(gui.get_node("navigation_menu/button_house"))
 
 		self.navigation_menu.button_house:set_input_enabled(false)
 
@@ -219,6 +220,7 @@ function on_message(self, message_id, message, sender)
 		gui.delete_node(gui.get_node("button_join"))
 		-- disable blocker
 		self.navigation_menu.button_house:set_input_enabled(true)
+		
 
 		 gui.set_enabled(gui.get_node("player_finder_zone"), true)
 		
@@ -232,16 +234,16 @@ function on_message(self, message_id, message, sender)
 	end
 
 	if message_id == hash("players_updated") and self.is_waiting_players_init then
-
-		gui.delete_node(self.players_finder_waiting_animation["prefab_flair_circle_animation"])
-		
+		if self.players_finder_waiting_animation then
+			gui.delete_node(self.players_finder_waiting_animation["prefab_flair_circle_animation"])
+		end
 		self.is_waiting_players_init = false
 
 	end
 
 	if message_id == hash("button_fight_clicked") then
 
-		 monarch.show(hash("pop_play_confirm_fight"), nil ,message.data)
+		 monarch.show(hash("popup_play_confirm_fight"), nil ,message)
 		
 
 	end

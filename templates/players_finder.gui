@@ -849,7 +849,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/glassPanel_tab"
   id: "finder_archmon_card/prefab_archmon_card/panel_archmon"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -931,12 +931,12 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
   material: ""
 }
 nodes {
   position {
-    x: 0.0
+    x: 14.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -960,9 +960,9 @@ nodes {
     w: 1.0
   }
   color {
-    x: 0.6
-    y: 0.502
-    z: 0.902
+    x: 1.0
+    y: 1.0
+    z: 0.0
     w: 1.0
   }
   type: TYPE_TEXT
@@ -1003,8 +1003,8 @@ nodes {
 }
 nodes {
   position {
-    x: -88.0
-    y: 0.0
+    x: -78.0
+    y: 8.0
     z: 0.0
     w: 1.0
   }
@@ -1021,20 +1021,20 @@ nodes {
     w: 1.0
   }
   size {
-    x: 25.0
-    y: 25.0
+    x: 50.0
+    y: 50.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.2
-    y: 0.4
-    z: 0.2
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/archmon_front-128"
   id: "finder_archmon_card/prefab_archmon_card/archmon_icon"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -1175,7 +1175,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
   material: ""
 }
 nodes {
@@ -1198,20 +1198,20 @@ nodes {
     w: 1.0
   }
   size {
-    x: 25.0
-    y: 25.0
+    x: 50.0
+    y: 50.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.502
-    y: 0.4
-    z: 0.8
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/paw_power"
   id: "finder_archmon_card/prefab_archmon_card/icon_power"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -1263,9 +1263,9 @@ nodes {
     w: 1.0
   }
   color {
-    x: 0.0
-    y: 0.2
-    z: 0.2
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_TEXT
@@ -1337,7 +1337,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/barVertical_Shadow"
   id: "finder_archmon_card/prefab_archmon_card/health_bar"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -1396,7 +1396,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/health_bar"
   id: "finder_archmon_card/prefab_archmon_card/health_fill_x"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -1491,7 +1491,7 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: -140.0
     y: -40.0
     z: 0.0
     w: 1.0
@@ -1509,7 +1509,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
+    x: 280.0
     y: 25.0
     z: 0.0
     w: 1.0
@@ -1522,11 +1522,11 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/barVertical_Shadow"
   id: "finder_archmon_card/prefab_archmon_card/xp_bar"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
   parent: "finder_archmon_card/prefab_archmon_card/box_stats"
   layer: ""
@@ -1568,7 +1568,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
+    x: 280.0
     y: 25.0
     z: 0.0
     w: 1.0
@@ -1581,11 +1581,11 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/xp_bar"
   id: "finder_archmon_card/prefab_archmon_card/xp_fill_x"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
   parent: "finder_archmon_card/prefab_archmon_card/xp_bar"
   layer: ""
@@ -1609,7 +1609,7 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: 140.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -1730,7 +1730,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
   material: ""
 }
 nodes {
@@ -1766,7 +1766,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "l1"
+  text: "l.1"
   font: "main"
   id: "finder_archmon_card/prefab_archmon_card/text_level"
   xanchor: XANCHOR_NONE
@@ -1879,20 +1879,20 @@ nodes {
     w: 1.0
   }
   size {
-    x: 25.0
-    y: 25.0
+    x: 40.0
+    y: 40.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.502
-    y: 0.702
-    z: 0.502
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/shieldIcon"
   id: "finder_archmon_card/prefab_archmon_card/icon_defense"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -1944,9 +1944,9 @@ nodes {
     w: 1.0
   }
   color {
-    x: 0.0
-    y: 0.2
-    z: 0.2
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_TEXT
@@ -2018,7 +2018,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/glassPanel_bar"
   id: "finder_archmon_card/prefab_archmon_card/box_energy"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -2046,7 +2046,7 @@ nodes {
 }
 nodes {
   position {
-    x: -75.0
+    x: -65.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -2262,7 +2262,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/energy_slot_empty"
   id: "finder_archmon_card/prefab_archmon_card/energy_slot_empty"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -2285,7 +2285,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: false
+  visible: true
   material: ""
 }
 nodes {
@@ -2321,7 +2321,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "template_archmon_card/energy_slot_fill"
   id: "finder_archmon_card/prefab_archmon_card/energy_slot_fill"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -2344,7 +2344,7 @@ nodes {
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: false
+  visible: true
   material: ""
 }
 nodes {

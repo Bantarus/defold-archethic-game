@@ -107,13 +107,9 @@ local function on_click_heal(self,args, button)
 	button:set_input_enabled(false)
 
 	-- hide button text
-	gui.set_enabled(self.text_button_feed.node, false)
+	gui.set_enabled(self.text_button_heal.node, false)
 
-	print("position button_feed : " .. gui.get_screen_position(self.button_feed.node))
-	print("button node position : " .. gui.get_screen_position(button.node))
-	print("camera scenn to world : " .. camera.screen_to_world(nil, gui.get_screen_position(self.button_feed.node))  )
-
-
+	
 	-- play waiting circle flair animation at button position
 
 	local cloned_prefab = gui.clone_tree(gui.get_node(self:get_template() .. "/prefab_flair_circle_animation"))
@@ -164,7 +160,7 @@ local function on_click_sleep(self,args,button)
 
 	-- send feed call to archethic
 
-	game_archethic.send_transfer_transaction(game_archethic.api_functions.SLEEP, {})
+	game_archethic.send_transfer_transaction(game_archethic.api_functions.REFRESH_ACTION_POINTS, {})
 
 	self.sleep_flair_cycle_cloned_prefab = cloned_prefab
 	self.is_sleeping = true
@@ -180,7 +176,7 @@ local function on_click_resurrect(self,args, button)
 	button:set_input_enabled(false)
 
 	-- hide button text
-	gui.set_enabled(button.node, false)
+	gui.set_enabled(self.text_button_resurrect.node, false)
 
 
 
@@ -271,11 +267,13 @@ function Component:on_message(message_id, message, sender)
 		end
 
 
-		if is_healing then
+		if self.is_healing then
 
-			if check_key_update(self, "heal", self.health_before_heal) then
+			if check_key_update(self, "health", self.health_before_heal) then
 
 				-- when update then 
+
+				print("health updated")
 
 				gui.delete_node(self.heal_flair_cycle_cloned_prefab[self:get_template() .. "/prefab_flair_circle_animation"])
 
@@ -292,7 +290,7 @@ function Component:on_message(message_id, message, sender)
 		end
 
 
-		if is_sleeping then
+		if self.is_sleeping then
 
 
 			if check_key_update(self, "energy", self.energy_before_sleep) then
@@ -315,8 +313,8 @@ function Component:on_message(message_id, message, sender)
 
 		end
 
-		if is_resurrecting then
-			if check_key_update(self, "health", self.energy_before_sleep) then
+		if self.is_resurrecting then
+			if check_key_update(self, "health", self.health_before_resurrect) then
 
 				-- when update then 
 
@@ -324,7 +322,7 @@ function Component:on_message(message_id, message, sender)
 
 
 				-- show button text
-				gui.set_enabled(self.text_button_sleep.node, true)
+				gui.set_enabled(self.text_button_resurrect.node, true)
 
 				-- enable back input
 				self.button_resurrect:set_input_enabled(true)

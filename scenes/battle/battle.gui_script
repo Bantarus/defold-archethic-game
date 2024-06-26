@@ -1,17 +1,96 @@
 local druid = require("druid.druid")
 local local_storage = require("modules.storage.local_storage")
 local monarch = require("monarch.monarch")
-
-local function on_click_skip(self,args,button)
-
-
-	print("skip button clicked ...")
+local archmon_combat_console = require("scripts.components.ui.ui_archmon_combat_console")
+local archmon_card = require("scripts.components.ui.ui_archmon_card")
 
 
-		-- popup form with login template
-	monarch.show(hash("popup_battle_end"))
+local function play_battle_round(self, index)
+
+	print("playing battle round : " .. index )
+	-- block next button first
+
+	-- play archmon attack pose 
+	
+	gui.animate(gui.get_node("player_archmon"), "position", gui.get_position(gui.get_node("player_archmon_pose_end")), 
+	gui.EASING_OUTBOUNCE, 1.5, 0, function() gui.set_position(gui.get_node("player_archmon"), self.player_archmon_start_pos) end, gui.PLAYBACK_ONCE_PINGPONG)
+
+	-- play attack animation 
+	local node_attack = gui.clone_tree(gui.get_node("attack_animation"))
+	gui.set_position(node_attack["attack_animation"], gui.get_position(gui.get_node("opponent_archmon")))
+	gui.set_enabled(node_attack["attack_animation"], true)
+	gui.animate(node_attack["attack_animation"], "color", vmath.vector4(0, 0, 0, 0), 
+	gui.EASING_LINEAR, 1, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+
+	-- play simple tint animation on attacked archmon
+	gui.animate(gui.get_node("opponent_archmon"), "color", vmath.vector4(1, 0, 0, 0), 
+	gui.EASING_LINEAR, 0.5, 0, function() gui.set_color(gui.get_node("opponent_archmon")
+	, vmath.vector4(1,1,1,1)) end , gui.PLAYBACK_ONCE_PINGPONG)
 
 
+	-- heart splate animation
+	local node_heart_splat = gui.clone_tree(gui.get_node("heart_splat"))
+	local player_damage = self.battle_info.player_battle_sequence[index].damage_done
+	gui.set_text(node_heart_splat["text_heart_splat"], player_damage)
+	gui.set_position(node_heart_splat["heart_splat"], gui.get_position(gui.get_node("heart_splat_start_pos")))
+	gui.set_enabled(node_heart_splat["heart_splat"], true)
+	gui.animate(node_heart_splat["heart_splat"], "position", gui.get_position(gui.get_node("heart_splat_end_pos")), 
+	gui.EASING_INBACK, 1, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+	gui.animate(node_heart_splat["heart_splat"], "color", vmath.vector4(0, 0, 0, 0), 
+	gui.EASING_LINEAR, 1, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+	
+	-- update opponent archmond card health
+	self.opponent_archmon_card:update_health(self.battle_info.player_battle_sequence[index].target_cypheran)
+	
+
+	-- display message opponent turn
+
+	-- play opponent archmon attack pose after 2 sec
+
+	timer.delay(2, false, function()
+
+
+		gui.animate(gui.get_node("opponent_archmon"), "position", gui.get_position(gui.get_node("opponent_archmon_pose_end")), 
+		gui.EASING_OUTBOUNCE, 1.5, 0, function() gui.set_position(gui.get_node("opponent_archmon"), self.opponent_archmon_start_pos) end, gui.PLAYBACK_ONCE_PINGPONG)
+
+		-- play attack animation 
+		local node_attack = gui.clone_tree(gui.get_node("attack_animation"))
+		gui.set_position(node_attack["attack_animation"], gui.get_position(gui.get_node("player_archmon")))
+		gui.set_enabled(node_attack["attack_animation"], true)
+		gui.animate(node_attack["attack_animation"], "color", vmath.vector4(0, 0, 0, 0), 
+		gui.EASING_LINEAR, 1, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+
+		
+
+		-- play simple tint animation on attacked archmon
+		gui.animate(gui.get_node("player_archmon"), "color", vmath.vector4(1, 0, 0, 0), 
+		gui.EASING_LINEAR, 0.5, 0, function() gui.set_color(gui.get_node("player_archmon")
+		, vmath.vector4(1,1,1,1)) end , gui.PLAYBACK_ONCE_PINGPONG)
+
+
+		-- heart splate animation
+		local node_heart_splat = gui.clone_tree(gui.get_node("heart_splat"))
+		local opponent_damage = self.battle_info.opponent_battle_sequence[index].damage_done
+		gui.set_text(node_heart_splat["text_heart_splat"], opponent_damage)
+		
+		gui.set_position(node_heart_splat["heart_splat"], gui.get_position(gui.get_node("opponent_heart_splat_start_pos")))
+		gui.set_enabled(node_heart_splat["heart_splat"], true)
+		gui.animate(node_heart_splat["heart_splat"], "position", gui.get_position(gui.get_node("opponent_heart_splat_end_pos")), 
+		gui.EASING_INBACK, 1, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+		gui.animate(node_heart_splat["heart_splat"], "color", vmath.vector4(0, 0, 0, 0), 
+		gui.EASING_LINEAR, 1, 0, nil, gui.PLAYBACK_ONCE_FORWARD)
+
+
+		-- update player archmond card 
+		self.player_archmon_card:update_health(self.battle_info.opponent_battle_sequence[index].target_cypheran)
+		
+
+		
+	end)
+
+
+	
+	
 end
 
 function init(self)
@@ -19,20 +98,39 @@ function init(self)
 	print("Init battle scene")
 
 	msg.post(".", "acquire_input_focus")
-
+	
 	-- init druid 
-
+	
 	self.druid = druid.new(self)
 
 	window.set_listener(function(_, event)
 		druid.on_window_callback(event)
 	end)
 
+	self.player_archmon_start_pos = gui.get_position(gui.get_node("player_archmon"))
+	self.opponent_archmon_start_pos = gui.get_position(gui.get_node("opponent_archmon"))
+
+	-- mock data from popup_play_confirm_fight
+	self.battle_info = monarch.data(hash("battle")).battle_info
+
+	-- init archmon cards
+	
+	self.player_archmon_card = self.druid:new(archmon_card,"player_archmon_card"
+	, gui.get_tree(gui.get_node("player_archmon_card/root"))
+	,self.battle_info.opponent_battle_sequence[1].target_cypheran,nil)
+	
+
+	self.opponent_archmon_card = self.druid:new(archmon_card,"opponent_archmon_card"
+	, gui.get_tree(gui.get_node("opponent_archmon_card/root"))
+	,self.battle_info.player_battle_sequence[1].target_cypheran,nil)
 
 
-	self.button_skip = self.druid:new_button("button_skip", on_click_skip)
-
-
+	-- init home console 
+	
+	self.archmon_combat_console = self.druid:new(archmon_combat_console,"archmon_combat_console"
+	, gui.get_tree(gui.get_node("archmon_combat_console/root"))
+	, "battle_round_card/root"
+	, self.battle_info)
 
 end
 
@@ -52,6 +150,21 @@ end
 function on_message(self, message_id, message, sender)
 	monarch.on_message(message_id, message, sender)
 	self.druid:on_message(message_id, message, sender)
+
+	if message_id == hash("play_battle_round") then
+
+		play_battle_round(self, message.index)
+
+	end
+
+	if message_id == hash("battle_end") then
+
+
+		 monarch.show("popup_battle_end", nil, { battle_info = self.battle_info})
+		
+		
+	end
+	
 end
 
 function on_input(self, action_id, action)

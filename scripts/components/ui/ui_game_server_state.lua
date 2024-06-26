@@ -27,7 +27,7 @@ local SCHEME = {
 local function display_game_server_state(self)
 
 
-	print("display game server update : "  .. json.encode(self.player_info))
+	print("display game server update ")
 
 	local health_pct_value = math.floor(self.player_info.archmon.health / self.player_info.archmon.base_health * 100 ) / 100
 	
@@ -39,6 +39,8 @@ local function display_game_server_state(self)
 	gui.set_text(self.text_power.node, self.player_info.archmon.power)
 
 	local xp_pct_value = math.floor(self.player_info.archmon.xp / (self.player_info.archmon.level * 20 ) * 100 ) / 100
+	print("bar xp pct value is : " .. xp_pct_value )
+
 	self.xp_bar:to(xp_pct_value)  
 	
 	local text_xp = self.player_info.archmon.xp .. "/" .. self.player_info.archmon.level * 20
@@ -90,7 +92,7 @@ local function update_game_server_state(self,api_key, force)
 
 	local session_decoded_value = {}
 	local current_value = self.player_info
-	print("update_game_server_state , current value : " .. json.encode(current_value))
+	--print("update_game_server_state , current value : " .. json.encode(current_value))
 
 	if force then
 		
@@ -112,7 +114,7 @@ local function update_game_server_state(self,api_key, force)
 	end
 
 	
-	print("session_decoded_value : " .. json.encode(session_decoded_value)  ) 
+	--print("session_decoded_value : " .. json.encode(session_decoded_value)  ) 
 	
 
 	if session_decoded_value ~= nil and not utils.deepCompare(session_decoded_value,current_value) then
@@ -215,7 +217,7 @@ function Component:init(template, nodes)
 		gui.set_text(self.text_power.node,self.player_info.archmon.power)
 		
 		local xp_bar_init_value = math.floor(self.player_info.archmon.xp / (self.player_info.archmon.level * 20 ) * 100 ) / 100
-		self.xp_bar:set_to(1)
+		self.xp_bar:set_to(xp_bar_init_value)
 		gui.set_text(self.text_xp.node, self.player_info.archmon.xp .. "/" .. self.player_info.archmon.level * 20)
 
 		-- energy grid filling

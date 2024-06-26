@@ -1,7 +1,7 @@
 name: "game"
 scale_along_z: 0
 embedded_instances {
-  id: "game"
+  id: "gui"
   data: "components {\n"
   "  id: \"game\"\n"
   "  component: \"/scenes/battle/battle.gui\"\n"

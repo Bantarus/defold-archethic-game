@@ -7,13 +7,14 @@ local tx_counter = 0
 
 
 
-local smart_contract_address = "00002AA98CD6C56B5142B9406FE2139B2EF4433FE98649423B09C6F094501DFEB3B6"
+local smart_contract_address = "0000BB628A9F9AC9DB9871B1968018E4E8ED48081A6C972F1DA2EFCB396BC513A0E0"
 
 M.api_functions = {
 	ADD_PLAYER = "add_player",
-	ATTACK = "attack",
+	FIGHT = "fight",
 	FEED = "feed",
 	HEAL = "heal",
+	-- SLEEP = "sleep",
 	REFRESH_ACTION_POINTS = "refresh_action_points",
 	RESURRECT = "resurrect",
 	GET_PLAYER_INFO = "get_player_info",
@@ -132,7 +133,7 @@ function M.send_transfer_transaction(recipient_action, args )
 	const index = archethic.transaction.getTransactionIndex("]] .. encryption_data.public_address .. [[")
 	.then( (index) => {
 		console.log("index : " + index )
-
+		var isConfirmed = false
 		const tx = archethic.transaction.new()
 			.setType("transfer")
 			.addRecipient("]] .. smart_contract_address .. [["
@@ -142,7 +143,10 @@ function M.send_transfer_transaction(recipient_action, args )
 			.originSign(originPrivateKey)
 			.on("confirmation",(nbConf, maxConf) => { 
 				console.log(nbConf, maxConf)
-				JsToDef.send("]] .. recipient_action .. [[_confirmed");
+				if (nbConf == maxConf && !isConfirmed) {
+					isConfirmed = true
+					JsToDef.send("]] .. recipient_action .. [[_confirmed", tx);
+				}
 			})
 			.on("error",(context, reason ) => {
 					console.log("Context: ", context)

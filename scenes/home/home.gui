@@ -2508,8 +2508,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 50.0
-    y: 50.0
+    x: 60.0
+    y: 60.0
     z: 0.0
     w: 1.0
   }
@@ -2662,11 +2662,12 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
+  overridden_fields: 46
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
   material: ""
 }
 nodes {
@@ -2689,20 +2690,20 @@ nodes {
     w: 1.0
   }
   size {
-    x: 25.0
-    y: 25.0
+    x: 50.0
+    y: 50.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.502
-    y: 0.4
-    z: 0.8
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "home/paw_power"
   id: "game_server_state/icon_power"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -2721,6 +2722,9 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
+  overridden_fields: 4
+  overridden_fields: 5
+  overridden_fields: 9
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
@@ -2828,7 +2832,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "home/barVertical_Shadow"
   id: "game_server_state/health_bar"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -2848,6 +2852,7 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 5
+  overridden_fields: 9
   overridden_fields: 46
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
@@ -2986,7 +2991,7 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: -140.0
     y: -40.0
     z: 0.0
     w: 1.0
@@ -3004,7 +3009,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
+    x: 280.0
     y: 25.0
     z: 0.0
     w: 1.0
@@ -3017,11 +3022,11 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "home/barVertical_Shadow"
   id: "game_server_state/xp_bar"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
   parent: "game_server_state/box_stats"
   layer: ""
@@ -3036,12 +3041,14 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
+  overridden_fields: 9
+  overridden_fields: 14
   overridden_fields: 46
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: false
+  visible: true
   material: ""
 }
 nodes {
@@ -3064,7 +3071,7 @@ nodes {
     w: 1.0
   }
   size {
-    x: 300.0
+    x: 280.0
     y: 25.0
     z: 0.0
     w: 1.0
@@ -3081,7 +3088,7 @@ nodes {
   id: "game_server_state/xp_fill_x"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_FIT
   parent: "game_server_state/xp_bar"
   layer: ""
@@ -3098,6 +3105,7 @@ nodes {
   alpha: 1.0
   overridden_fields: 5
   overridden_fields: 9
+  overridden_fields: 14
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
@@ -3107,7 +3115,7 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
+    x: 140.0
     y: 0.0
     z: 0.0
     w: 1.0
@@ -3352,11 +3360,12 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
+  overridden_fields: 46
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
   enabled: true
-  visible: true
+  visible: false
   material: ""
 }
 nodes {
@@ -3379,20 +3388,20 @@ nodes {
     w: 1.0
   }
   size {
-    x: 25.0
-    y: 25.0
+    x: 40.0
+    y: 40.0
     z: 0.0
     w: 1.0
   }
   color {
-    x: 0.502
-    y: 0.702
-    z: 0.502
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "home/shieldIcon"
   id: "game_server_state/icon_defense"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -3411,6 +3420,9 @@ nodes {
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
+  overridden_fields: 4
+  overridden_fields: 5
+  overridden_fields: 9
   template_node_child: true
   size_mode: SIZE_MODE_MANUAL
   custom_type: 0
